@@ -26,5 +26,16 @@ namespace MonthTest
 			var mf = new Calendar.MonthFinder(date);
 			Assert.AreEqual(new DateTime(2014, 11, 20), mf.Month[19]);
 		}
+
+		[Test]
+		public void CompleteCalendarPage()
+		{
+			var date = new DateTime(2014, 11, 1);
+			var mf = new Calendar.MonthFinder(date);
+			var fullPage = mf.GetCalendarPage();
+			Assert.AreEqual(0, fullPage[0][1]);
+			Assert.AreEqual(4, fullPage[1][1]);
+			Assert.AreEqual(28, fullPage[4][4]);
+		}
 	}
 }
