@@ -24,7 +24,7 @@ namespace MonthTest
 		{
 			var date = new DateTime(2014, 11, 1);
 			var mf = new Calendar.MonthFinder(date);
-			Assert.AreEqual(new DateTime(2014, 11, 20), mf.Month[19]);
+			Assert.AreEqual(new DateTime(2014, 11, 20), mf.WholeMonth[19]);
 		}
 
 		[Test]

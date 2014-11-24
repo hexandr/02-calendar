@@ -13,6 +13,11 @@ namespace Calendar
 		private readonly int _year;
 		private readonly DateTime[] _wholeMonth;
 
+		public int AmountOfDays { get { return _amountOfDays; } }
+		public DateTime[] WholeMonth { get { return _wholeMonth; } }
+		public int Month { get { return _month; } }
+		public int Year { get { return _year; } }
+
 		public MonthFinder(DateTime date)
 		{
 			_month = date.Month;
@@ -32,6 +37,7 @@ namespace Calendar
 			}
 			return result;
 		}
+
 		public int[][] GetCalendarPage()
 		{
 			var currentWeek = new List<DateTime>();
@@ -45,9 +51,6 @@ namespace Calendar
 			}
 			return weeks.Select(ConvertListOfDays2Week).ToArray();
 		}
-
-		public int AmountOfDays { get { return _amountOfDays; } }
-		public DateTime[] Month { get { return _wholeMonth; } }
 
 		private bool IsLeap(int year)
 		{
