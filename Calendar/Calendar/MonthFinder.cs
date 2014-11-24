@@ -11,25 +11,30 @@ namespace Calendar
 		private readonly int _amountOfDays;
 		private readonly int _month;
 		private readonly int _year;
+		private readonly int _day;
 		private readonly DateTime[] _wholeMonth;
 
 		public int AmountOfDays { get { return _amountOfDays; } }
 		public DateTime[] WholeMonth { get { return _wholeMonth; } }
 		public int Month { get { return _month; } }
 		public int Year { get { return _year; } }
+		public int Day { get { return _day; } }
 
 		public MonthFinder(DateTime date)
 		{
 			_month = date.Month;
 			_year = date.Year;
-			_amountOfDays = GetAmountOfDays();
-			_wholeMonth = GetMonth(date);
+			_day = date.Day;
+			_amountOfDays = DateTime.DaysInMonth(_year, _month);
+			_wholeMonth = GetMonth();
 		}
 
-		private int[] ConvertListOfDays2Week(List<DateTime> listOfDays)
+		private int[] ConvertListOfDays2Week(List<DateTime> listOfDays, bool isFirstWeek)
 		{
 			int offset = 7 - listOfDays.Count;
 			var result = new int[7];
+			if (!isFirstWeek)
+				return listOfDays.Select(date => date.Day).ToArray();
 			for (int i = 0; i < 7; i++)
 			{
 				int day = i < offset ? 0 : listOfDays[i - offset].Day;
@@ -49,35 +54,24 @@ namespace Calendar
 				weeks.Add(new List<DateTime>(currentWeek));
 				currentWeek.Clear();
 			}
-			return weeks.Select(ConvertListOfDays2Week).ToArray();
+			if (currentWeek.Count != 0)
+				weeks.Add(new List<DateTime>(currentWeek));
+			var page = new int[6][];
+			bool isFirstWeek = true;
+			for (int i = 0; i < 6; i++)
+			{
+				if (i == weeks.Count)
+				{
+					page[i] = new int[7];
+					continue;
+				}
+				page[i] = ConvertListOfDays2Week(weeks[i], isFirstWeek);
+				isFirstWeek = false;
+			}
+			return page;
 		}
 
-		private bool IsLeap(int year)
-		{
-			if (year%400 == 0)
-				return true;
-			if (year%100 == 0)
-				return false;
-			if (year%4 == 0)
-				return true;
-			return false;
-		}
-
-		private int GetAmountOfDays()
-		{
-			int numOfDays;
-			if (IsLeap(_year) && _month == 2)
-				numOfDays = 29;
-			else if (_month == 2)
-				numOfDays = 28;
-			else if (_month == 4 || _month == 6 || _month == 9 || _month == 11)
-				numOfDays = 30;
-			else
-				numOfDays = 31;
-			return numOfDays;
-		}
-
-		private DateTime[] GetMonth(DateTime date)
+		private DateTime[] GetMonth()
 		{
 			var thisMonth = new DateTime[_amountOfDays];
 			for (int i = 1; i <= _amountOfDays; i++)
