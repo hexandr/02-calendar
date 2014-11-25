@@ -45,6 +45,7 @@ namespace Calendar
 			data = new MonthFinder(date);
 			Height = 260;
 			Width = 260;
+			BackColor = Color.White;
 			Paint += PaintDates;
 			Paint += PaintMonthYear;
 			Paint += PaintDaysOfWeek;
@@ -58,7 +59,7 @@ namespace Calendar
 			int offset = 34;
 			for (int i = 0; i < dayOfWeek.Count; i++)
 			{
-				graphics.DrawString(dayOfWeek[i], font, Brushes.LightCoral, 4 + i * offset, 35);
+				graphics.DrawString(dayOfWeek[i], font, Brushes.Teal, 4 + i * offset, 35);
 			}
 		}
 
